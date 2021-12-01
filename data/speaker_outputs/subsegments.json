@@ -1,6 +1,0 @@
-{"audio_filepath": "/home/jose/conv_entropy/data/an4_diarize_test.wav", "offset": 0.42, "duration": 1.5, "label": "UNK"}
-{"audio_filepath": "/home/jose/conv_entropy/data/an4_diarize_test.wav", "offset": 1.17, "duration": 1.5, "label": "UNK"}
-{"audio_filepath": "/home/jose/conv_entropy/data/an4_diarize_test.wav", "offset": 1.92, "duration": 1.5, "label": "UNK"}
-{"audio_filepath": "/home/jose/conv_entropy/data/an4_diarize_test.wav", "offset": 2.67, "duration": 1.5, "label": "UNK"}
-{"audio_filepath": "/home/jose/conv_entropy/data/an4_diarize_test.wav", "offset": 3.42, "duration": 1.5, "label": "UNK"}
-{"audio_filepath": "/home/jose/conv_entropy/data/an4_diarize_test.wav", "offset": 4.17, "duration": 0.8700000000000001, "label": "UNK"}
