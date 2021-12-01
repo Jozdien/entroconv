@@ -1,0 +1,2 @@
+[30:00.42 - 30:03.04] speaker_1: eleven twenty seven fifty seven 
+[30:03.04 - 30:05.04] speaker_0: october twenty fourth nineteen seventy
