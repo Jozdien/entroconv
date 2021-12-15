@@ -3,3 +3,6 @@ __pycache__/
 
 # Diarize function temp files
 diarize/
+
+# Output annotated transcript file
+annotated_transcript.txt
