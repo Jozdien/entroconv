@@ -1,10 +1,9 @@
 from diarize import transcript
-from gpt2 import get_entropy
-
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
+from gpt2 import word_entropy
 
 
+# Converts raw transcript to list of sets of the form (speaker_name, speaker_text)
+# speaker_text is the list of words spoken by speaker_name in a line
 def transcript_sets(transcript):
 	ret = []
 
@@ -24,6 +23,8 @@ def transcript_sets(transcript):
 	return ret
 
 
+# Converts "list of sets" transcript to a list of sets of the form (speaker_name, annotated_speaker_text)
+# annotated_speaker_text is a list of sets of the form (word, word_entropy)
 def transcript_entropies(transcript):
 	running_prefix = ""
 	ret = []
@@ -36,7 +37,7 @@ def transcript_entropies(transcript):
 
 		for word in text:
 			word_formatted = " " + word
-			word_surprise = get_entropy(running_prefix, word_formatted)
+			word_surprise = word_entropy(running_prefix, word_formatted)
 
 			word_set = (word, word_surprise)
 
