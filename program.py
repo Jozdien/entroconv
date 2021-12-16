@@ -26,8 +26,10 @@ def transcript_sets(transcript):
 # Converts "list of sets" transcript to a list of sets of the form (speaker_name, annotated_speaker_text)
 # annotated_speaker_text is a list of sets of the form (word, word_entropy)
 def transcript_entropies(transcript):
-	running_prefix = ""
 	ret = []
+
+	# Keeps track of the entire transcript so far to be used as prefix to new word
+	running_prefix = ""
 
 	for line_set in transcript:
 		name, text = line_set
