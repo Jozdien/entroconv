@@ -1,5 +1,10 @@
 from diarize import transcript
 from gpt2 import word_entropy
+from audio_utils import audio_convert, split_audio, get_extension, get_duration
+
+AUDIO_FILENAME = "audio.wav"
+num_speakers = 2
+segment_lengths = 30
 
 
 # Converts raw transcript to list of sets of the form (speaker_name, speaker_text)
@@ -56,12 +61,18 @@ def transcript_entropies(transcript):
 
 if __name__ == '__main__':
 
-	transcript = transcript(AUDIO_FILENAME="audio.wav", num_speakers=2)
+	if get_extension(AUDIO_FILENAME) != "wav":
+		AUDIO_FILENAME = audio_convert(AUDIO_FILENAME)
 
-	transcript_formatted = transcript_sets(transcript)
-	transcript_annotated = transcript_entropies(transcript_formatted)
+	AUDIO_FILENAME_LIST = split_audio(AUDIO_FILENAME, seg_len=segment_lengths)
 
 	with open("annotated_transcript.txt", "w+") as file:
-		for (name, text) in transcript_annotated:
-			file.write(f"{name}: {text}")
-			file.write("\n")
+		for AUDIO_FILENAME in AUDIO_FILENAME_LIST:
+			transcript = transcript(AUDIO_FILENAME=AUDIO_FILENAME, num_speakers=num_speakers)
+
+			transcript_formatted = transcript_sets(transcript)
+			transcript_annotated = transcript_entropies(transcript_formatted)
+
+			for (name, text) in transcript_annotated:
+				file.write(f"{name}: {text}")
+				file.write("\n")
