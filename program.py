@@ -1,6 +1,6 @@
-from diarize import transcript
+from diarize import timestamps, transcript
 from gpt2 import word_entropy
-from audio_utils import audio_convert, split_audio, get_extension, get_duration
+from audio_utils import audio_convert, split, get_extension, get_duration
 
 AUDIO_FILENAME = "audio.wav"
 num_speakers = 2
@@ -64,15 +64,20 @@ if __name__ == '__main__':
 	if get_extension(AUDIO_FILENAME) != "wav":
 		AUDIO_FILENAME = audio_convert(AUDIO_FILENAME)
 
-	AUDIO_FILENAME_LIST = split_audio(AUDIO_FILENAME, seg_len=segment_lengths)
+	word_ts = timestamps(AUDIO_FILENAME)
+	timestamps = word_ts[1][0]
+
+	AUDIO_FILENAME_LIST = split(AUDIO_FILENAME, seg_len=segment_lengths, timestamps=timestamps)
 
 	with open("annotated_transcript.txt", "w+") as file:
-		for AUDIO_FILENAME in AUDIO_FILENAME_LIST:
-			transcript = transcript(AUDIO_FILENAME=AUDIO_FILENAME, num_speakers=num_speakers)
+		for i, AUDIO_FILENAME in enumerate(AUDIO_FILENAME_LIST):
+			transcript_raw = transcript(AUDIO_FILENAME=AUDIO_FILENAME, num_speakers=num_speakers)
 
-			transcript_formatted = transcript_sets(transcript)
+			transcript_formatted = transcript_sets(transcript_raw)
 			transcript_annotated = transcript_entropies(transcript_formatted)
 
-			for (name, text) in transcript_annotated:
+			file.write(f"Segment {i+1}\n-----------------\n")
+			for name, text in transcript_annotated:
 				file.write(f"{name}: {text}")
 				file.write("\n")
+			file.write("\n")

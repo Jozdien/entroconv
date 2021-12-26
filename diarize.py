@@ -16,7 +16,7 @@ def read_file(path_to_file):
     return contents
 
 
-def transcript(AUDIO_FILENAME, num_speakers, directory="diarize", extended=False):
+def timestamps(AUDIO_FILENAME, directory="diarize"):
     AUDIO_BASENAME = AUDIO_FILENAME[:AUDIO_FILENAME.rfind('.')]
     ROOT = os.getcwd()
     data_dir = os.path.join(ROOT, directory)
@@ -43,7 +43,7 @@ def transcript(AUDIO_FILENAME, num_speakers, directory="diarize", extended=False
         'duration': None, 
         'label': 'infer', 
         'text': '-', 
-        'num_speakers': num_speakers, 
+        'num_speakers': 2, 
         'rttm_filepath': None, 
         'uem_filepath' : None
     }
@@ -83,6 +83,80 @@ def transcript(AUDIO_FILENAME, num_speakers, directory="diarize", extended=False
     # Generating words and timestamps from audio
     word_list, word_ts_list = asr_diar_offline.run_ASR(asr_model)
 
+    return word_list, word_ts_list
+
+
+def transcript(AUDIO_FILENAME, num_speakers, directory="diarize", extended=False, preprocessed=False, parameters=[]):
+    AUDIO_BASENAME = AUDIO_FILENAME[:AUDIO_FILENAME.rfind('.')]
+    ROOT = os.getcwd()
+    data_dir = os.path.join(ROOT, directory)
+
+    # Unless the directory is left blank and files are stored in the root, make new directory
+    if directory:
+        os.makedirs(data_dir, exist_ok=True)
+
+
+    # Pretrained ASR model parameters
+    CONFIG_URL = "https://raw.githubusercontent.com/NVIDIA/NeMo/main/examples/speaker_tasks/diarization/conf/offline_diarization_with_asr.yaml"
+
+    if not os.path.exists(os.path.join(data_dir,'offline_diarization_with_asr.yaml')):
+        CONFIG = wget.download(CONFIG_URL, data_dir)
+    else:
+        CONFIG = os.path.join(data_dir,'offline_diarization_with_asr.yaml')
+
+    cfg = OmegaConf.load(CONFIG)
+
+
+    meta = {
+        'audio_filepath': AUDIO_FILENAME, 
+        'offset': 0, 
+        'duration': None, 
+        'label': 'infer', 
+        'text': '-', 
+        'num_speakers': num_speakers, 
+        'rttm_filepath': None, 
+        'uem_filepath' : None
+    }
+
+    if not preprocessed:
+        with open(os.path.join(data_dir,'input_manifest.json'),'w') as fp:
+            json.dump(meta,fp)
+            fp.write('\n')
+
+
+    cfg.diarizer.manifest_filepath = os.path.join(data_dir,'input_manifest.json')
+
+    pretrained_speaker_model='ecapa_tdnn'
+    cfg.diarizer.manifest_filepath = cfg.diarizer.manifest_filepath
+
+    # Directory to store intermediate files and prediction outputs
+    cfg.diarizer.out_dir = data_dir 
+    cfg.diarizer.speaker_embeddings.model_path = pretrained_speaker_model
+    cfg.diarizer.speaker_embeddings.parameters.window_length_in_sec = 1.5
+    cfg.diarizer.speaker_embeddings.parameters.shift_length_in_sec = 0.75
+    cfg.diarizer.clustering.parameters.oracle_num_speakers=True
+
+    # USE VAD generated from ASR timestamps
+    cfg.diarizer.asr.model_path = 'QuartzNet15x5Base-En'
+    cfg.diarizer.oracle_vad = False
+    cfg.diarizer.asr.parameters.asr_based_vad = True
+    cfg.diarizer.asr.parameters.threshold=300
+
+
+    asr_diar_offline = ASR_DIAR_OFFLINE(**cfg.diarizer.asr.parameters)
+    asr_diar_offline.root_path = cfg.diarizer.out_dir
+
+    AUDIO_RTTM_MAP = audio_rttm_map(cfg.diarizer.manifest_filepath)
+    asr_diar_offline.AUDIO_RTTM_MAP = AUDIO_RTTM_MAP
+    asr_model = asr_diar_offline.set_asr_model(cfg.diarizer.asr.model_path)
+
+
+    # Generating words and timestamps from audio
+    if preprocessed:
+        word_list, word_ts_list = parameters
+    else:
+        word_list, word_ts_list = asr_diar_offline.run_ASR(asr_model)
+
     # Creates .rttm file
     score = asr_diar_offline.run_diarization(cfg, word_ts_list)
 
@@ -103,3 +177,14 @@ def transcript(AUDIO_FILENAME, num_speakers, directory="diarize", extended=False
         return json_contents
 
     return transcript
+
+
+'''
+
+Method 1:
+Use timestamps, cut audio at closest to 150s mark, split speaker speeches into 10-word "sentences".  If any left at the tail with <10 words, cut audio *before* those words, and use them in the next segment.
+
+Method 2:
+Pass cfg as a parameter to the function
+
+'''

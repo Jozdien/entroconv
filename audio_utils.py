@@ -31,33 +31,38 @@ def audio_convert(AUDIO_FILENAME):
 	return CONVERTED_FILENAME
 
 
-def single_split(audio, SPLIT_FILENAME, start, end):
-	if end == 0:
-		new_audio = audio[start:]
-	else:
-		new_audio = audio[start:end]
+def single_split(audio, SPLIT_FILENAME, start, seg_len, timestamps_end):
+	end = min(timestamps_end, key=lambda x:abs(x - (start + seg_len)))
+
+	if start == end:
+		return -1
+
+	new_audio = audio[start*1000:end*1000]
 
 	new_audio.export(SPLIT_FILENAME, format="wav")
 
+	return end
 
-def split_audio(AUDIO_FILENAME, seg_len=1):
+
+def split(AUDIO_FILENAME, seg_len, timestamps):
 	audio = AudioSegment.from_file(AUDIO_FILENAME, format="wav")
 	new_files = []
 
 	file_prefix = AUDIO_FILENAME[:-4]
 
-	duration = math.ceil(audio.duration_seconds)
+	start = timestamps[0][0]
 
-	for i, val in enumerate(range(0, duration, seg_len)):
+	timestamps_end = [item[1] for item in timestamps]
+
+	i = 0
+	while start >= 0:
 		SPLIT_FILENAME = f"{AUDIO_FILENAME}-{i:05}.wav"
-		start = seg_len * i
-		end = seg_len * (i + 1)
 
-		if end > duration:
-			end = 0
+		start = single_split(audio=audio, SPLIT_FILENAME=SPLIT_FILENAME, start=start, seg_len=seg_len, timestamps_end=timestamps_end)
 
-		single_split(audio=audio, SPLIT_FILENAME=SPLIT_FILENAME, start=start, end=end)
-
-		new_files.append(SPLIT_FILENAME)
+		if start >= 0:
+			new_files.append(SPLIT_FILENAME)
+			
+		i += 1
 
 	return new_files
