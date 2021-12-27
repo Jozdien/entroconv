@@ -6,3 +6,7 @@ diarize/
 
 # Output annotated transcript file
 annotated_transcript.txt
+
+# Audio segments files
+audio_long.wav-*
+audio_short.wav-*
