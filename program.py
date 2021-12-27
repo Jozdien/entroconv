@@ -1,10 +1,11 @@
-from diarize import timestamps, transcript
+from diarize import config, timestamps, transcript
 from gpt2 import word_entropy
-from audio_utils import audio_convert, split, get_extension, get_duration
+from audio_utils import audio_segment, audio_convert, single_split, get_extension
 
-AUDIO_FILENAME = "audio.wav"
+AUDIO_FILENAME = "audio_long.wav"
 num_speakers = 2
 segment_lengths = 30
+sentence_length = 10
 
 
 # Converts raw transcript to list of sets of the form (speaker_name, speaker_text)
@@ -64,20 +65,55 @@ if __name__ == '__main__':
 	if get_extension(AUDIO_FILENAME) != "wav":
 		AUDIO_FILENAME = audio_convert(AUDIO_FILENAME)
 
-	word_ts = timestamps(AUDIO_FILENAME)
-	timestamps = word_ts[1][0]
+	audio = audio_segment(AUDIO_FILENAME)
+	params = config()
 
-	AUDIO_FILENAME_LIST = split(AUDIO_FILENAME, seg_len=segment_lengths, timestamps=timestamps)
+	words, word_ts = timestamps(AUDIO_FILENAME, num_speakers=num_speakers)
+	timestamps = word_ts[0]
+
+	print(words)
+	print(word_ts)
 
 	with open("annotated_transcript.txt", "w+") as file:
-		for i, AUDIO_FILENAME in enumerate(AUDIO_FILENAME_LIST):
-			transcript_raw = transcript(AUDIO_FILENAME=AUDIO_FILENAME, num_speakers=num_speakers)
+		start = timestamps[0][0]
+
+		i = 1
+		while start >= 0:
+			SPLIT_FILENAME = f"{AUDIO_FILENAME}-{i:05}.wav"
+
+			start = single_split(audio=audio, SPLIT_FILENAME=SPLIT_FILENAME, start=start, seg_len=segment_lengths, timestamps=timestamps)
+
+			transcript_raw, transcript_extended = transcript(AUDIO_FILENAME=SPLIT_FILENAME, num_speakers=num_speakers, params=params)
 
 			transcript_formatted = transcript_sets(transcript_raw)
 			transcript_annotated = transcript_entropies(transcript_formatted)
 
-			file.write(f"Segment {i+1}\n-----------------\n")
+			# for item in transcript_annotated:
+			# 	print(item)
+
+			# print("------------")
+
+			if len(transcript_annotated[-1][1]) < sentence_length and start >= 0:
+				speaker = transcript_annotated[-1][0]
+				del transcript_annotated[-1]
+
+				# for item in transcript_annotated:
+				# 	print(item)
+
+				for word in reversed(transcript_extended["words"]):
+					if word["speaker_label"] == speaker:
+						start_temp = start + word["start_time"]
+					else:
+						break
+
+				start = start_temp
+
+			print(start)
+
+			file.write(f"Segment {i}\n-----------------\n")
 			for name, text in transcript_annotated:
 				file.write(f"{name}: {text}")
 				file.write("\n")
 			file.write("\n")
+
+			i += 1
