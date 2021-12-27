@@ -8,5 +8,5 @@ diarize/
 annotated_transcript.txt
 
 # Audio segments files
-audio_long.wav-*
-audio_short.wav-*
+audio_long.wav-*.wav
+audio_short.wav-*.wav
