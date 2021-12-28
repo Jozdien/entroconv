@@ -4,7 +4,7 @@ from audio_utils import audio_segment, audio_convert, single_split, get_extensio
 
 AUDIO_FILENAME = "audio_long.wav"
 num_speakers = 2
-segment_lengths = 30
+segment_lengths = 150
 sentence_length = 10
 
 
@@ -59,6 +59,42 @@ def transcript_entropies(transcript):
 	return ret
 
 
+# Yield successive n-sized chunks from lst
+def chunks(lst, n):
+	for i in range(0, len(lst), n):
+		yield lst[i:i + n]
+
+
+# Converts transcript with each word annotated to sentence annotations of the form (speaker_name, annotated_sentences)
+# annotated_sentences is a list of sets of the form (sentence, sentence_entropy)
+def transcript_sentences(transcript, sen_len):
+	ret = []
+
+	for (speaker, annotated_text) in transcript:
+		ret_set = (speaker, [])
+
+		sentence_chunks = list(chunks(annotated_text, sen_len))
+
+		if len(sentence_chunks[-1]) in [1, 2]:
+			for word in sentence_chunks[-1]:
+				sentence_chunks[-2].append(word)
+			del sentence_chunks[-1]
+
+		for sentence in sentence_chunks:
+			words = [word[0] for word in sentence]
+			word_ents = [word[1] for word in sentence]
+
+			word_str = " ".join(words)
+			entropy = sum(word_ents) / len(word_ents)
+
+			ret_set[1].append((word_str, entropy))
+
+		ret.append(ret_set)
+
+	return ret
+
+
+
 
 if __name__ == '__main__':
 
@@ -71,9 +107,6 @@ if __name__ == '__main__':
 	words, word_ts = timestamps(AUDIO_FILENAME, num_speakers=num_speakers)
 	timestamps = word_ts[0]
 
-	print(words)
-	print(word_ts)
-
 	with open("annotated_transcript.txt", "w+") as file:
 		start = timestamps[0][0]
 
@@ -81,24 +114,16 @@ if __name__ == '__main__':
 		while start >= 0:
 			SPLIT_FILENAME = f"{AUDIO_FILENAME}-{i:05}.wav"
 
-			start = single_split(audio=audio, SPLIT_FILENAME=SPLIT_FILENAME, start=start, seg_len=segment_lengths, timestamps=timestamps)
+			next_start = single_split(audio=audio, SPLIT_FILENAME=SPLIT_FILENAME, start=start, seg_len=segment_lengths, timestamps=timestamps)
 
 			transcript_raw, transcript_extended = transcript(AUDIO_FILENAME=SPLIT_FILENAME, num_speakers=num_speakers, params=params)
 
-			transcript_formatted = transcript_sets(transcript_raw)
-			transcript_annotated = transcript_entropies(transcript_formatted)
+			transcript_formatted = transcript_sets(transcript=transcript_raw)
+			transcript_annotated = transcript_entropies(transcript=transcript_formatted)
 
-			# for item in transcript_annotated:
-			# 	print(item)
-
-			# print("------------")
-
-			if len(transcript_annotated[-1][1]) < sentence_length and start >= 0:
+			if len(transcript_annotated[-1][1]) < sentence_length and next_start >= 0:
 				speaker = transcript_annotated[-1][0]
 				del transcript_annotated[-1]
-
-				# for item in transcript_annotated:
-				# 	print(item)
 
 				for word in reversed(transcript_extended["words"]):
 					if word["speaker_label"] == speaker:
@@ -107,11 +132,14 @@ if __name__ == '__main__':
 						break
 
 				start = start_temp
+			else:
+				start = next_start
 
-			print(start)
+
+			sentences_annotated = transcript_sentences(transcript=transcript_annotated, sen_len=sentence_length)
 
 			file.write(f"Segment {i}\n-----------------\n")
-			for name, text in transcript_annotated:
+			for name, text in sentences_annotated:
 				file.write(f"{name}: {text}")
 				file.write("\n")
 			file.write("\n")
