@@ -75,7 +75,7 @@ def transcript_sentences(transcript, sen_len):
 
 		sentence_chunks = list(chunks(annotated_text, sen_len))
 
-		if len(sentence_chunks[-1]) in [1, 2]:
+		if len(sentence_chunks[-1]) in [1, 2] and len(sentence_chunks) > 1:
 			for word in sentence_chunks[-1]:
 				sentence_chunks[-2].append(word)
 			del sentence_chunks[-1]
