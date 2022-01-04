@@ -8,6 +8,13 @@ def audio_segment(AUDIO_FILENAME):
 	return AudioSegment.from_file(AUDIO_FILENAME, format="wav")
 
 
+def format_audio(AUDIO_FILENAME):
+	audio = AudioSegment.from_wav(AUDIO_FILENAME)
+	audio = audio.set_channels(1)
+	audio = audio.set_frame_rate(16000)
+	audio.export(AUDIO_FILENAME, format="wav")
+
+
 def get_extension(AUDIO_FILENAME):
 	with open(AUDIO_FILENAME, "rb") as file:
 		info = fleep.get(file.read(128))
@@ -58,23 +65,3 @@ def single_split(audio, SPLIT_FILENAME, start, seg_len, timestamps):
 		start = -1
 
 	return start
-
-
-def split(AUDIO_FILENAME, seg_len, timestamps):
-	audio = AudioSegment.from_file(AUDIO_FILENAME, format="wav")
-	new_files = []
-
-	start = timestamps[0][0]
-
-	i = 0
-	while start >= 0:
-		SPLIT_FILENAME = f"{AUDIO_FILENAME}-{i:05}.wav"
-
-		start = single_split(audio=audio, SPLIT_FILENAME=SPLIT_FILENAME, start=start, seg_len=seg_len, timestamps=timestamps)
-
-		if start >= 0:
-			new_files.append(SPLIT_FILENAME)
-			
-		i += 1
-
-	return new_files

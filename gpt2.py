@@ -1,4 +1,5 @@
 import torch
+import math
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
 tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
@@ -27,27 +28,27 @@ def get_probs(string):
 
 # Returns the most likely next token relative to string
 def most_prob_cont(string):
-	logits = get_logits(string)
+	probs = get_probs(string)
 
-	return tokenizer.decode(torch.argmax(logits[0][-1])), torch.max(logits[0][-1])
+	return tokenizer.decode(torch.argmax(probs[0][-1])), torch.log(torch.max(probs[0][-1]))
 
 
 # Returns the entropy value (mean of logit values of comprising token(s)) for next_word relative to string
 def word_entropy(string, next_word):
-	logits = get_logits(string)
+	probs = get_probs(string)
 
 	next_token = tokenizer.encode(next_word)
 
-	return torch.mean(logits[0][-1][next_token]).item()
+	return torch.log(torch.mean(probs[0][-1][next_token])).item()
 
 
 # Returns a vector of entropy values (logit values) for all comprising token(s) of next_word relative to string
 def word_entropy_full(string, next_word):
-	logits = get_logits(string)
+	probs = get_probs(string)
 
 	next_token = tokenizer.encode(next_word)
 
-	return logits[0][-1][next_token]
+	return torch.log(probs[0][-1][next_token])
 
 
 # Returns the probability of next_word being continuation to string

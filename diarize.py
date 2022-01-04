@@ -158,14 +158,3 @@ def transcript(AUDIO_FILENAME, num_speakers, params=None, directory="diarize"):
         transcript_extended = json.load(f)
 
     return transcript, transcript_extended
-
-
-'''
-
-Method 1:
-Use timestamps, cut audio at closest to 150s mark, split speaker speeches into 10-word "sentences".  If any left at the tail with <10 words, cut audio *before* those words, and use them in the next segment.
-
-Method 2:
-Pass cfg as a parameter to the function
-
-'''

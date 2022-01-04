@@ -1,16 +1,25 @@
-from diarize import config, timestamps, transcript
-from gpt2 import word_entropy
-from audio_utils import audio_segment, audio_convert, single_split, get_extension
+import diarize
+import gpt2
+import audio_utils
 
-AUDIO_FILENAME = "audio_long.wav"
+AUDIO_FILENAME = "audio.wav"
 num_speakers = 2
 segment_lengths = 150
 sentence_length = 10
 
 
-# Converts raw transcript to list of sets of the form (speaker_name, speaker_text)
-# speaker_text is the list of words spoken by speaker_name in a line
 def transcript_sets(transcript):
+	"""
+	Formats raw transcript into name, text pairs.
+
+	Args:
+		transcript: list of strings of the form <timestamp> <speaker_name> <text>
+
+	Returns:
+		A list of sets of the form (speaker_name, text)
+		
+	"""
+
 	ret = []
 
 	for line in transcript:
@@ -29,9 +38,18 @@ def transcript_sets(transcript):
 	return ret
 
 
-# Converts "list of sets" transcript to a list of sets of the form (speaker_name, annotated_speaker_text)
-# annotated_speaker_text is a list of sets of the form (word, word_entropy)
 def transcript_entropies(transcript):
+	"""
+	Converts formatted transcript into annotated transcript.
+
+	Args:
+		transcript: list of sets of the form(speaker_name, text)
+
+	Returns:
+		A list of sets of the form (speaker_name, annotated_text), where annotated_text is a list of sets of the form (word, entropy)
+
+	"""
+
 	ret = []
 
 	# Keeps track of the entire transcript so far to be used as prefix to new word
@@ -45,7 +63,7 @@ def transcript_entropies(transcript):
 
 		for word in text:
 			word_formatted = " " + word
-			word_surprise = word_entropy(running_prefix, word_formatted)
+			word_surprise = gpt2.word_entropy(running_prefix, word_formatted)
 
 			word_set = (word, word_surprise)
 
@@ -59,15 +77,28 @@ def transcript_entropies(transcript):
 	return ret
 
 
-# Yield successive n-sized chunks from lst
 def chunks(lst, n):
+	"""
+	Yield successive n-sized chunks from lst
+	"""
 	for i in range(0, len(lst), n):
 		yield lst[i:i + n]
 
 
-# Converts transcript with each word annotated to sentence annotations of the form (speaker_name, annotated_sentences)
-# annotated_sentences is a list of sets of the form (sentence, sentence_entropy)
 def transcript_sentences(transcript, sen_len):
+	"""
+	Splits annotated transcript into sentences.
+
+	Args:
+		transcript: list of sets of the form (speaker_name, annotated_text), where annotated_text is a list of sets of the form (word, entropy)
+
+		sen_len: number of words in a sentence
+
+	Returns:
+		A list of sets of the form (speaker_name, annotated_sentences), where annotated_sentences is a list of sets of the form (sentence, avg_entropy)
+
+	"""
+
 	ret = []
 
 	for (speaker, annotated_text) in transcript:
@@ -98,13 +129,16 @@ def transcript_sentences(transcript, sen_len):
 
 if __name__ == '__main__':
 
-	if get_extension(AUDIO_FILENAME) != "wav":
-		AUDIO_FILENAME = audio_convert(AUDIO_FILENAME)
+	if audio_utils.get_extension(AUDIO_FILENAME) != "wav":
+		AUDIO_FILENAME = audio_utils.audio_convert(AUDIO_FILENAME)
 
-	audio = audio_segment(AUDIO_FILENAME)
-	params = config()
+	# Converting to mono and sampling rate to 16000
+	audio_utils.format_audio(AUDIO_FILENAME)
 
-	words, word_ts = timestamps(AUDIO_FILENAME, num_speakers=num_speakers)
+	audio = audio_utils.audio_segment(AUDIO_FILENAME)
+	params = diarize.config()
+
+	words, word_ts = diarize.timestamps(AUDIO_FILENAME, num_speakers=num_speakers)
 	timestamps = word_ts[0]
 
 	with open("annotated_transcript.txt", "w+") as file:
@@ -114,9 +148,9 @@ if __name__ == '__main__':
 		while start >= 0:
 			SPLIT_FILENAME = f"{AUDIO_FILENAME}-{i:05}.wav"
 
-			next_start = single_split(audio=audio, SPLIT_FILENAME=SPLIT_FILENAME, start=start, seg_len=segment_lengths, timestamps=timestamps)
+			next_start = audio_utils.single_split(audio=audio, SPLIT_FILENAME=SPLIT_FILENAME, start=start, seg_len=segment_lengths, timestamps=timestamps)
 
-			transcript_raw, transcript_extended = transcript(AUDIO_FILENAME=SPLIT_FILENAME, num_speakers=num_speakers, params=params)
+			transcript_raw, transcript_extended = diarize.transcript(AUDIO_FILENAME=SPLIT_FILENAME, num_speakers=num_speakers, params=params)
 
 			transcript_formatted = transcript_sets(transcript=transcript_raw)
 			transcript_annotated = transcript_entropies(transcript=transcript_formatted)
