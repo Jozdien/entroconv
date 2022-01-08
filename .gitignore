@@ -1,12 +1,8 @@
 # Byte-compiled files
-__pycache__/
+src/__pycache__/
 
 # Diarize function temp files
-diarize/
+src/diarize/
 
 # Output annotated transcript file
-annotated_transcript.txt
-
-# Audio segments files
-audio_long.wav-*.wav
-audio_short.wav-*.wav
+samples/annotated_transcript.txt
