@@ -1,8 +1,9 @@
+import nltk
 import gpt2
 
-def transcript_sets(transcript):
+def audio_transcript_to_sets(transcript):
 	"""
-	Formats raw transcript into name, text pairs.
+	Formats raw audio transcript into name, text pairs.
 
 	Args:
 		transcript: list of strings of the form <timestamp> <speaker_name> <text>
@@ -30,12 +31,12 @@ def transcript_sets(transcript):
 	return ret
 
 
-def transcript_entropies(transcript):
+def get_transcript_entropies_words(transcript):
 	"""
 	Converts formatted transcript into annotated transcript.
 
 	Args:
-		transcript: list of sets of the form(speaker_name, text)
+		transcript: list of sets of the form(speaker_name, text) where text is a list of words
 
 	Returns:
 		A list of sets of the form (speaker_name, annotated_text), where annotated_text is a list of sets of the form (word, entropy)
@@ -55,7 +56,7 @@ def transcript_entropies(transcript):
 
 		for word in text:
 			word_formatted = " " + word
-			word_surprise = gpt2.word_entropy(running_prefix, word_formatted)
+			word_surprise = gpt2.entropy_of_next(running_prefix, word_formatted)
 
 			word_set = (word, word_surprise)
 
@@ -65,6 +66,73 @@ def transcript_entropies(transcript):
 
 		ret.append(ret_set)
 		running_prefix += "\n"
+
+	return ret
+
+
+def get_transcript_entropies_sentences(transcript):
+	"""
+	Gets entropies for sentences in transcript
+
+	Args:
+		transcript: list of sets of the form(speaker_name, sentences) where sentences is a list of strings
+
+	Returns:
+		A list of sets of the form (speaker_name, annotated_sentences), where annotated_sentences is a list of sets of the form (sentence, avg_entropy)
+
+	"""
+
+	ret = []
+
+	# Keeps track of the entire transcript so far to be used as prefix to new word
+	running_prefix = ""
+
+	for (speaker, sentence_list) in transcript:
+		running_prefix += speaker + ":"
+
+		ret_set = (speaker, [])
+
+		for sentence in sentence_list:
+			sentence_formatted = " " + sentence
+			surprise = gpt2.entropy_of_next(running_prefix, sentence_formatted)
+
+			sentence_set = (sentence, surprise)
+
+			ret_set[1].append(sentence_set)
+
+			running_prefix += sentence_formatted
+
+		ret.append(ret_set)
+		running_prefix += "\n"
+
+	return ret
+
+
+def get_essay_entropies(essay_sentences):
+	"""
+	Gets entropies of sentences in essay
+
+	Args:
+		essay_sentences: list of strings, each containing a sentence
+
+	Returns:
+		A list of sets of the form (setence, avg_entropy)
+
+	"""
+
+	ret = []
+
+	essay_sentences = [essay_sentences[0]] + [" " + sentence for sentence in essay_sentences[1:]]
+
+	# Keeps track of the entire transcript so far to be used as prefix to new word
+	running_prefix = ""
+
+	for sentence in essay_sentences:
+		surprise = gpt2.entropy_of_next(running_prefix, sentence)
+
+		ret.append((sentence, surprise))
+
+		running_prefix += sentence
 
 	return ret
 
@@ -115,7 +183,7 @@ def chunks(lst, n):
 		yield lst[i:i + n]
 
 
-def transcript_sentences(transcript, sen_len):
+def transcript_to_sentences_arbitrary(transcript, sen_len):
 	"""
 	Splits annotated transcript into sentences.
 
@@ -153,3 +221,49 @@ def transcript_sentences(transcript, sen_len):
 		ret.append(ret_set)
 
 	return ret
+
+
+def transcript_to_sentences_proper(transcript):
+	"""
+	Splits transcript into sentences.
+
+	Args:
+		transcript: list of sets of the form (speaker_name, text), where text is a string
+
+	Returns:
+		A list of sets of the form (speaker_name, sentences), where sentences is a list of strings
+
+	"""
+
+	try:
+		nltk.data.find('tokenizers/punkt')
+	except:
+		nltk.download('punkt')
+	ret = []
+
+	for (speaker, text) in transcript:
+		sentences = nltk.tokenize.sent_tokenize(text)
+
+		ret.append((speaker, sentences))
+
+	return ret
+
+
+def essay_to_sentences(essay):
+	"""
+	Splits essay into sentences.
+
+	Args:
+		essay: string of raw data from essay file
+
+	Returns:
+		A list of strings, each containing a sentence
+
+	"""
+
+	try:
+		nltk.data.find('tokenizers/punkt')
+	except:
+		nltk.download('punkt')
+	
+	return nltk.tokenize.sent_tokenize(essay)

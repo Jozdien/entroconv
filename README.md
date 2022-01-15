@@ -32,6 +32,12 @@ python -m pip install git+https://github.com/NVIDIA/NeMo.git@main#egg=nemo_toolk
 pip install torchaudio -f https://download.pytorch.org/whl/torch_stable.html
 ```
 
+### NLP Stuff
+
+```shell
+pip install nltk
+```
+
 ### Miscellaneous audio processing
 
 ```shell
