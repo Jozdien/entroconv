@@ -44,3 +44,11 @@ pip install nltk
 pip install pydub
 pip install fleep
 ```
+
+## Error Fixes
+
+If you see this error: `OSError: libtorch_hip.so: cannot open shared object file: No such file or directory`, run the following command:
+
+```shell
+pip install torch==1.10.0+cu111 torchvision==0.11.1+cu111 torchaudio==0.10.0+cu111 -f https://download.pytorch.org/whl/cu111/torch_stable.html
+```
