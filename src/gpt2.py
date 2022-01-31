@@ -1,5 +1,6 @@
 import torch
 import math
+import time
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
 tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
@@ -39,7 +40,7 @@ def most_prob_cont(string):
 
 
 # Returns the entropy value (mean of logit values of comprising token(s)) for a sequence of next tokens relative to string
-def entropy_of_next(string, next_str):
+def entropy_of_next(string, next_str, str_lim=1000):
 	if string == "":
 		tokens = tokenizer.encode(next_str)
 		if len(tokens) == 1:
@@ -48,8 +49,9 @@ def entropy_of_next(string, next_str):
 			first_token = tokenizer.decode(tokens[0])
 			string = first_token
 			next_str = next_str[len(first_token):]
-	elif len(string) > 200:
-		string = string[string[-200:].find("."):]
+	elif len(string) > str_lim:
+		# Cutting string to get latest set of sentences of total length < str_lim
+		string = string[-(str_lim - string[-str_lim:].find(".")) + 2:]
 
 	probs = get_probs(string)
 

@@ -31,6 +31,23 @@ def audio_transcript_to_sets(transcript):
 	return ret
 
 
+def transcript_to_speakers(transcript):
+	"""
+	Splits transcript lines into list of (speaker, speech) sets
+
+	Args:
+		transcript: list of strings containing one speaker and their speech
+
+	Returns:
+		A list of sets of the form (speaker_name, speech)
+		
+	"""
+
+	transcript = [(item[:item.find(':')], item[item.find(':')+2:]) for item in transcript]
+
+	return transcript
+
+
 def get_transcript_entropies_words(transcript):
 	"""
 	Converts formatted transcript into annotated transcript.

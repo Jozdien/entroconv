@@ -1,6 +1,4 @@
 import os
-import diarize
-import audio_utils
 import text_utils
 
 TRANSCRIPT_FILENAME = "../samples/test_transcript.txt"
@@ -12,6 +10,9 @@ sentence_length = 10
 
 
 def annotate_audio(AUDIO_FILENAME, num_speakers, segment_lengths, sentence_length):
+	import diarize
+	import audio_utils
+	
 	complete_transcript = []
 
 	# Converting other audio formats to wav
@@ -71,7 +72,7 @@ def annotate_transcript(FILENAME):
 		transcript = f.read().splitlines()
 
 	# Formatting raw text into (speaker, text) pairs
-	transcript = [(item[:item.find(':')], item[item.find(':')+2:]) for item in transcript]
+	transcript = text_utils.transcript_to_speakers(transcript)
 
 	# Splitting text into sentences
 	speaker_sentences = text_utils.transcript_to_sentences_proper(transcript)
@@ -101,7 +102,7 @@ if __name__ == '__main__':
 	# print(annotated_audio_transcript)
 	
 	# annotated_transcript = annotate_transcript(FILENAME=TRANSCRIPT_FILENAME)
-	# print(annotate_transcript)
+	# print(annotated_transcript)
 	
 	# annotated_essay = annotate_essay(FILENAME=ESSAY_FILENAME)
 	# print(annotated_essay)
