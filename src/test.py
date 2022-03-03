@@ -83,8 +83,8 @@ def sim_of_conts(prompt, seq_no=2):
 		cont_seqs.append(cont)
 
 	sims = []
-	for i in range(2):
-		for j in range(i+1, 2):
+	for i in range(seq_no):
+		for j in range(i+1, seq_no):
 			if i != j:
 				sim = cos_sim(cont_seqs[i], cont_seqs[j])
 				sims.append(sim)
@@ -107,9 +107,9 @@ def cannelize():
 
 	sentences = nltk.tokenize.sent_tokenize(raw_text)
 
+	print(sim_of_conts(prompt=raw_text[:-len(sentences[-1])-1], seq_no=5) - sim_of_conts(prompt=raw_text, seq_no=5))
 	print(sentences[-1])
 	print("The above sentence makes the posterior sequences this much more uncertain.")
-	print(sim_of_conts(raw_text[:-len(sentences[-1])]) - sim_of_conts(raw_text))
 
 
 if __name__ == "__main__":
