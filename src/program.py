@@ -98,8 +98,8 @@ def annotate_essay(FILENAME):
 
 if __name__ == '__main__':
 
-	# annotated_audio_transcript = annotate_audio(AUDIO_FILENAME=AUDIO_FILENAME, num_speakers=num_speakers, segment_lengths=segment_lengths, sentence_length=sentence_length)
-	# print(annotated_audio_transcript)
+	annotated_audio_transcript = annotate_audio(AUDIO_FILENAME=AUDIO_FILENAME, num_speakers=num_speakers, segment_lengths=segment_lengths, sentence_length=sentence_length)
+	print(annotated_audio_transcript)
 	
 	# annotated_transcript = annotate_transcript(FILENAME=TRANSCRIPT_FILENAME)
 	# print(annotated_transcript)

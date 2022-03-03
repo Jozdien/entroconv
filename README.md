@@ -4,10 +4,17 @@
 
 In order to run `program.py`, install all the requirements below.
 
+### OpenAI API
+
+```shell
+pip install openai
+```
+
 ### HuggingFace Transformers + PyTorch
 
 ```shell
 pip install transformers[torch]
+pip install -U sentence-transformers
 ```
 
 ### Speaker Diarization

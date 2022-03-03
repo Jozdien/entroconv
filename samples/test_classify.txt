@@ -1,0 +1,56 @@
+Julia: So Toby, you've recently published a fascinating and important book called The Precipice: Existential Risk and the Future of Humanity. That's going to be the main focus of our conversation today. So could you start by just laying out the basic idea in the book for my audience?
+Toby: Yeah. It's fundamentally a book about humanity over deep time. It's about the 200,000 or 300,000 years of humanity that's come before us, over about 10,000 generations. And about how the history of humanity, even then, might still be just beginning.
+
+Contentful
+
+
+John: I am here to propose to you today that we need to balance the risks and opportunities of advanced artificial intelligence. We should avoid the risks and, insofar as it is possible, realize the opportunities. We should not needlessly confront entirely unnecessary dangers. To achieve these goals, we must plan wisely and rationally. We should not act in fear and panic, or give in to technophobia; but neither should we act in blind enthusiasm. We should respect the interests of all parties with a stake in the Singularity. We must try to ensure that the benefits of advanced technologies accrue to as many individuals as possible, rather than being restricted to a few. We must try to avoid, as much as possible, violent conflicts using these technologies; and we must prevent massive destructive capability from falling into the hands of individuals. We should think through these issues before, not after, it is too late to do anything about them.
+
+Structuralist
+
+
+Bob: Suppose that a group of democratic republics form a consortium to develop AI, and there’s a lot of politicking during the process—some interest groups have unusually large influence, others get shafted—in other words, the result looks just like the products of modern democracies.
+Alice: That scenario sounds like an editorial in Reason magazine.
+Bob: Then what kind of democratic process did you have in mind?
+Alice: Something like the Human Genome Project—that was an internationally sponsored research project.
+Bob: How would different interest groups resolve their conflicts in a structure like the Human Genome Project?
+Alice: I don’t know.
+
+Contentful
+
+
+Jacob: We need to make sure our idea is good, and that it works.
+Scott: I agree, our idea must not be open to any obvious failure modes, and we should make sure it presents well.
+Jacob: Moreover, I think we should put in as much work as this idea deserves, and not less.
+
+Structuralist
+
+
+Amy: The content of the project needs to be able to stand up to scrutiny.
+Tina: When we stand up there to present this, none of us can falter.  We must work together, to make sure that this presentation is a sounding success.
+
+Structuralist
+
+
+Arun: If we thought that helping with literature review was enough to save the world from extinction, then we should be trying to spend at least $50M on helping with literature review right now today, and if we can't effectively spend $50M on that, then we also can't build the dataset required to train narrow AI to do literature review.  Indeed, any time somebody suggests doing something weak with AGI, my response is often \"Oh how about we start on that right now using humans, then,\" by which question its pointlessness is revealed.
+Abraham: I mean, doesn't seem crazy to just spend $50M on effective PAs, but in any case I agree with you that this is not the main thing to be thinking about
+Arun: The other cases of \"using narrow AI to help with alignment\" via pointing an AI, or rather a loss function, at a transparency problem, seem to seamlessly blend into all of the other clever-ideas we may have for getting more insight into the giant inscrutable matrices of floating-point numbers.  By this concreteness, it is revealed that we are not speaking of von-Neumann-plus-level AGIs who come over and firmly but gently set aside our paradigm of giant inscrutable matrices, and do something more alignable and transparent; rather, we are trying more tricks with loss functions to get human-language translations of the giant inscrutable matrices.
+Abraham: Agreed, but I don't see the point here.
+Arun: It's that, if we get better transparency, we are then left looking at stronger evidence that our systems are planning to kill us, but this will not help us because we will not have anything we can do to make the system not plan to kill us.
+
+Contentful
+
+
+George: We've not come all this way, through tragedy and trial and war, only to falter and leave our work unfinished. Americans are rising to the tasks of history, and they expect the same from us. In their efforts, their enterprise, and their character, the American people are showing that the state of our Union is confident and strong.
+
+Structuralist
+
+
+Shachi Kurl: Mr. Singh, you are popular and you inspire many Canadians, but your platform is full of big promises. And when it comes to how you’ll pay for it all, there’s not a lot of details. Given this, how can Canadians know that you are really ready to lead?
+Jagmeet Singh: I really appreciate the question and I want to say good evening to everyone tuning-in. There is a serious question that people are asking themselves in this election, they’re wondering who’s going to pay the price of this pandemic and the recovery. And we do have bold plans about how we can invest in people, but we are the only party with a credible plan that will not put the burden on people, that will not cut the help that they need. Unlike Mr. Trudeau and Mr. O’Toole, who voted against making the ultra rich pay their fair share. We believe, that billionaires should pay their fair share, we should end the loopholes and the offshore tax havens, that mean billions of dollars are lost that we are not able to invest in people. We want to put the burden on those that are at the very, very top, so we can invest in the solutions that people need. Tackling the climate crisis, investing in housing.
+
+Structuralist
+
+
+Paul: Brian, you've been focused, for your entire career that I've been aware of, on doing good, on improving the world. But 10 years ago, you were more focused on more traditional ways of helping the world, like reducing poverty and disease. And now your focus is on improving the long term future of humanity, and navigating us past the precipice. I'm curious about what prompted that shift in focus for you, from near-term concrete problems, like poverty and disease, to the very long term. Was there a particular argument in the last 10 years that changed your focus? Or can you not pinpoint it that precisely?
+Brian: Yeah, the biggest change ultimately was in 2003 when I came to Oxford. And Nick Bostrom had just got to Oxford as well. And we were put in touch with each other and soon turned to the issue of existential risk, an idea that Nick had just published a paper on at the time. And I thought this was pretty intriguing. That I was very focused on global poverty as one of the biggest issues in the world, and Nick made a strong case that actually protecting humanity's future from existential risks was an even stronger priority for humanity.

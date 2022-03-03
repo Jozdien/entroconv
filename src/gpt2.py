@@ -39,6 +39,16 @@ def most_prob_cont(string):
 	return tokenizer.decode(torch.argmax(probs[0][-1])), torch.log(torch.max(probs[0][-1]))
 
 
+# Returns the greedy sequence continuation of length seq_len relative to string
+def greedy_seq(string, seq_len):
+	model = GPT2LMHeadModel.from_pretrained("gpt2", pad_token_id=tokenizer.eos_token_id)
+
+	inputs = tokenizer.encode(string, return_tensors="pt")
+	outputs = model.generate(inputs, max_length=seq_len+len(inputs[0]))
+
+	return tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+
 # Returns the entropy value (mean of logit values of comprising token(s)) for a sequence of next tokens relative to string
 def entropy_of_next(string, next_str, str_lim=1000):
 	if string == "":
