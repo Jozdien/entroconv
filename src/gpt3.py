@@ -40,9 +40,10 @@ def completion(prompt, engine='text-davinci-001', model=None, response_length=64
   )
 
   answer = response.choices[0]['text']
-  logprobs = response.choices[0]['logprobs']['top_logprobs']
+  token_logprobs = zip(response.choices[0]['logprobs']['tokens'], response.choices[0]['logprobs']['token_logprobs'])
+  top_logprobs = response.choices[0]['logprobs']['top_logprobs']
   
-  return answer, logprobs
+  return answer, token_logprobs, top_logprobs
 
 
 def embedding(input, engine="text-similarity-davinci-001"):
