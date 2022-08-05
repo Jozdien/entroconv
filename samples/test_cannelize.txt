@@ -1,0 +1,86 @@
+Joe Rogan
+Three, two, one, boom. Hello, Jack.
+
+Jack Dorsey
+What's up?
+
+Joe Rogan
+Nice to meet you, man.
+
+Jack Dorsey
+Nice to meet you, finally.
+
+Joe Rogan
+Yeah. Keep this sucker like a fist from your face.
+
+Jack Dorsey
+Got it.
+
+Joe Rogan
+Good. First of all. dude, you started a company. When you started Twitter, when you guys first started, did you have any idea -- Well, there's no way you could have had any idea what it would be now.
+
+Jack Dorsey
+No.
+
+Joe Rogan
+But one of the things I always try to emphasize with people when people are like, "Twitter's crazy," I'm like, "How could it not be crazy? There's never been anything like it before." Like imagine trying to predict the kind of impact -- The President of the United States uses Twitter to threaten other countries.
+
+Jack Dorsey
+Yeah.
+
+Joe Rogan
+I mean, who the fuck saw that coming?
+
+Jack Dorsey
+Not us.
+
+Joe Rogan
+Nobody saw that coming.
+
+Jack Dorsey
+Not us.
+
+Joe Rogan
+What did you think it was going to be when you first did it?
+
+Jack Dorsey
+Well, you know, we were building this thing for ourselves. And that's how everything starts. We wanted to use it. We wanted to stay connected with each other. We-
+
+Joe Rogan
+Like a group text almost?
+
+Jack Dorsey
+Like a group text. We loved our phones. We loved technology. We actually started this as a hack week project out of a failed company called Odeo. It's podcasting.
+
+Joe Rogan
+I remember that. I remember Odeo.
+
+Jack Dorsey
+Yeah. Super early on. We were really creative folks, but we weren't that passionate about where podcasting was going in our particular domain. And we just got a lot of competition early on. iTunes just released a podcast directory, but we knew we wanted to work together. We knew we love this idea of one-button publishing, we love this idea of collaboration, we love this idea of being anywhere, and being able to share what was happening. That was the idea. I mean, that was it, and that's what we wanted it to be.
+
+Jack Dorsey
+And I think the most beautiful and, also, sometimes, uncomfortable aspect of Twitter is we really learned what it wanted to be, and the people helped create it. Like everything that we hold sacred now, the @ symbol, the hashtag, the retweet, those were not invented by me or the company. Those were things that we discovered, things that we discovered people using. And we just observed it, and we noticed what they were trying to do. They're trying to talk with one another. They were trying to collect tweets around topics with a hashtag.
+
+Joe Rogan
+Has anybody figured out when the first use of hashtag something was created?
+
+Jack Dorsey
+Yeah, it was actually our Lead Designer, Robert Anderson, who leads our design of the Cash App. Hired him for a Square later on, but he was the first one. He was actually communicating with his brother, and he put @Buzz. His brother's name is Buzz. And it just spread. It wasn't en masse, but people were doing it.
+
+Jack Dorsey
+But what was most interesting is not what they're doing, but what they wanted to do with it. They wanted to address each other. And that changed the company completely. That changed the service because it went from just broadcasting what's happening to conversation and to being able to address anyone publicly out in the open, which, came with it, a lot of power and, also, a lot of issues as well.
+
+Joe Rogan
+Yeah. The use of hashtags, like looking up #Fryfest or hashtag -- Anytime that something weird that's in the news, that's such a unique way to find things. But to go on Twitter and to utilize that, it's -- I mean, it's interesting that this guy just did it just to contact his brother.
+
+Jack Dorsey
+Well, that was the @ symbol. The hashtag was this guy, Chris Messina.
+
+Joe Rogan
+Oh, different guy.
+
+Jack Dorsey
+And he was trying to tag around topics that he was tweeting about. And, again, that spread. All we did was made it easier. We made it more accessible. We enabled everyone to do it. With the @ symbol, we made a page that collected all mentions of your name. With the hashtag, we allowed people to search immediately, so you could tap on the keyword, and you would see everyone talking about that or tweeting about that specific hashtag. So, these things were just emergent behaviors that we didn't predict, and they became the lifeblood of the service.
+
+Joe Rogan
+What's fascinating to me about something like Twitter or even something like YouTube is that there's not a lot of other ones like it. There's just this one thing. I wear a pretty pink dress at home.
