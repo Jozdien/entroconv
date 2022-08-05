@@ -1,0 +1,11 @@
+# Byte-compiled files
+src/__pycache__/
+
+# Diarize function temp files
+src/diarize/
+
+# Output annotated transcript file
+samples/annotated_transcript.txt
+
+# SpanBERT model binary
+models/spanbert_large_with_head/**.bin
